@@ -1,6 +1,9 @@
 source 'https://rubygems.org'
 
 gem 'sinatra'
-gem 'rerun'
 gem 'mongoid'
 gem 'haml'
+
+group :development do
+    gem 'rerun'
+end
