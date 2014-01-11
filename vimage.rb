@@ -4,18 +4,21 @@ require 'haml'
 require 'mime/types'
 require 'base64'
 require 'rmagick'
+require 'will_paginate_mongoid'
 
 require_relative 'models/image'
 
 set :public_folder, proc{ File.join(root, 'static') }
 
 Mongoid.load!('config/mongoid.yml')
+WillPaginate.per_page = 20
 
 # 画像一覧
-#TODO Paging
 #TODO RSS
 get '/' do
-  @images = Image.recent
+  page = [(params[:page] || '1')[/^(\d+)$/, 1].to_i, 1].max
+
+  @images = Image.recent.paginate(page: page)
   haml :index
 end
 

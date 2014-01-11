@@ -7,8 +7,10 @@
   %thead
     %tr
       %th image
+  != will_paginate @images
   %tbody
     - @images.each do |image|
       %tr
         %td
           %img{src: "/images/#{image._id}"}
+  != will_paginate @images
