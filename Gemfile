@@ -6,6 +6,7 @@ gem 'haml'
 gem 'rmagick'
 gem 'will_paginate_mongoid'
 gem 'thin'
+gem 'mongoid_taggable'
 
 group :development do
     gem 'rerun'

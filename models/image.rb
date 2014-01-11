@@ -3,6 +3,9 @@ require 'mime/types'
 class Image
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Taggable
+
+  tags_separator ' '
 
   field :mime, type: String
   field :body, type: Moped::BSON::Binary

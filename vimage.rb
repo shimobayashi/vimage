@@ -5,8 +5,10 @@ require 'base64'
 require 'rmagick'
 require 'will_paginate_mongoid'
 require 'rss/maker'
+require 'mongoid_taggable'
 
 require_relative 'models/image'
+require_relative 'models/tags'
 
 set :public_folder, proc{ File.join(root, 'static') }
 
@@ -22,26 +24,28 @@ end
 # 画像一覧
 get '/' do
   page = [(params[:page] || '1')[/^(\d+)$/, 1].to_i, 1].max
+  @tags = Tags.new(params[:tags])
 
-  @images = Image.recent.paginate(page: page)
+  @images = @tags.images.recent.paginate(page: page)
   haml :index
 end
 
 get '/images.rss' do
-  @images = Image.recent.limit(200)
+  @tags = Tags.new(params[:tags])
+  @images = @tags.images.recent.limit(200)
 
   rss = RSS::Maker.make('2.0') do |rss|
-    rss.channel.title = 'vimage'
+    rss.channel.title = "#{@tags.title_prefix}vimage"
     rss.channel.description = 'images from vimage'
-    rss.channel.link = "#{base_url}/"
+    rss.channel.link = "#{base_url}/#{@tags.query_params}"
 
     @images.each do |image|
       item = rss.items.new_item
-      item.title = 'image'
+      item.title = image.title
       item.link = "#{base_url}#{image.url}"
       item.guid.content = image._id
       item.guid.isPermaLink = false
-      item.description = %Q(<img src="#{base_url}#{image.url}">)
+      item.description = %Q(<p>tags: #{image.tags}</p><img src="#{base_url}#{image.url}">)
       item.date = image.updated_at
     end
   end
@@ -51,7 +55,7 @@ get '/images.rss' do
 end
 
 # 画像投稿エンドポイント
-#TODO tagging
+#TODO url
 post '/images/new' do
   # Decode
   mime, base64 = params[:data_uri].scan(/^data:(.+);base64,(.+)$/).first
@@ -68,7 +72,8 @@ post '/images/new' do
   image = Image.new({
     mime: mime,
     body: Moped::BSON::Binary.new(:generic, body),
-    title: params[:title]
+    title: params[:title],
+    tags: params[:tags],
   })
   halt 503, "failed to save image: #{image.erros.join(', ')}" unless image.save
   redirect '/'

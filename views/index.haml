@@ -1,19 +1,25 @@
 %form{action: '/images/new', method: :post}
   %input#title{type: :text, name: :title, placeholder: 'title'}
+  %input#title{type: :text, name: :tags, placeholder: 'tags'}
   %input#file{type: :file}
   %input#hidden{type: :hidden, name: :data_uri}
-  %input#submit{type: :submit, disabled: true}
+  %input#submit{type: :submit, disabled: true, value: 'アップロード'}
   %p 画像のアップロードはFile APIに対応しているブラウザーからご利用ください。
 != will_paginate @images
+%form
+  %input{type: :text, name: :tags, placeholder: 'tag1 tag2', value: (@tags || []).join(Image.tags_separator)}
+  %input#submit{type: :submit, value: '検索'}
 %table
   %thead
     %tr
       %th title
+      %th tags
       %th image
   %tbody
     - @images.each do |image|
       %tr
         %td= image.title
+        %td= image.tags
         %td
           %img{src: image.url}
 != will_paginate @images
