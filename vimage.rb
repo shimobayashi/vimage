@@ -11,12 +11,15 @@ set :public_folder, proc{ File.join(root, 'static') }
 Mongoid.load!('config/mongoid.yml')
 
 # 画像一覧
+#TODO Paging
+#TODO RSS
 get '/' do
   @images = Image.recent
   haml :index
 end
 
 # 画像投稿エンドポイント
+#TODO Compress
 post '/images/new' do
   mime, base64 = params[:data_uri].scan(/^data:(.+);base64,(.+)$/).first
 
