@@ -25,7 +25,7 @@ post '/images/new' do
   body = Base64.decode64(base64)
 
   image = Image.new({
-    mime: mime,
+    mime: mime_type.to_s,
     body: Moped::BSON::Binary.new(:generic, body),
   })
   halt 503, 'failed to save image' unless image.save
