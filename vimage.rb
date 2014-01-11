@@ -1,7 +1,6 @@
 require 'sinatra'
 require 'mongoid'
 require 'haml'
-require 'mime/types'
 require 'base64'
 require 'rmagick'
 require 'will_paginate_mongoid'
@@ -57,8 +56,6 @@ end
 post '/images/new' do
   # Decode
   mime, base64 = params[:data_uri].scan(/^data:(.+);base64,(.+)$/).first
-  mime_type = MIME::Types[mime].first
-  halt 400, 'invalid mime' unless mime_type.media_type == 'image' && mime_type.registered?
   body = Base64.decode64(base64)
 
   # Compress
