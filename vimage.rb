@@ -44,6 +44,7 @@ post '/images/new' do
 end
 
 # 画像表示
+#TODO auth
 get '/images/:id' do
   image = Image.find(params[:id])
   halt 404, 'image not found' unless image
