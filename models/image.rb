@@ -4,12 +4,14 @@ class Image
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  field mime: String
-  field body: Moped::BSON::Binary
+  field :mime, type: String
+  field :body, type: Moped::BSON::Binary
+  field :title, type: String, default: 'no title'
 
   scope :recent, desc(:created_at)
 
   validate :validate_mime
+  validates :title, length: { maximum: 256 }
 
   def validate_mime
     mime_type = MIME::Types[mime].first

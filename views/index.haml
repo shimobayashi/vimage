@@ -1,16 +1,19 @@
 %form{action: '/images/new', method: :post}
+  %input#title{type: :text, name: :title, placeholder: 'title'}
   %input#file{type: :file}
   %input#hidden{type: :hidden, name: :data_uri}
   %input#submit{type: :submit, disabled: true}
   %p 画像のアップロードはFile APIに対応しているブラウザーからご利用ください。
+!= will_paginate @images
 %table
   %thead
     %tr
+      %th title
       %th image
-  != will_paginate @images
   %tbody
     - @images.each do |image|
       %tr
+        %td= image.title
         %td
           %img{src: image.url}
-  != will_paginate @images
+!= will_paginate @images

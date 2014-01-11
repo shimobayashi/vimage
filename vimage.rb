@@ -52,7 +52,6 @@ end
 
 # 画像投稿エンドポイント
 #TODO tagging
-#TODO title
 post '/images/new' do
   # Decode
   mime, base64 = params[:data_uri].scan(/^data:(.+);base64,(.+)$/).first
@@ -69,8 +68,9 @@ post '/images/new' do
   image = Image.new({
     mime: mime,
     body: Moped::BSON::Binary.new(:generic, body),
+    title: params[:title]
   })
-  halt 503, 'failed to save image' unless image.save
+  halt 503, "failed to save image: #{image.erros.join(', ')}" unless image.save
   redirect '/'
 end
 
