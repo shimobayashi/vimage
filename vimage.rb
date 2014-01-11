@@ -44,7 +44,7 @@ post '/images/new' do
 end
 
 # 画像表示
-get '/images/:id/show' do
+get '/images/:id' do
   image = Image.find(params[:id])
   halt 404, 'image not found' unless image
   content_type image.mime
