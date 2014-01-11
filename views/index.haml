@@ -1,0 +1,14 @@
+%form{action: '/images/new', method: :post}
+  %input#file{type: :file}
+  %input#hidden{type: :hidden, name: :data_uri}
+  %input#submit{type: :submit, disabled: true}
+  %p 画像のアップロードはFile APIに対応しているブラウザーからご利用ください。
+%table
+  %thead
+    %tr
+      %th image
+  %tbody
+    - @images.each do |image|
+      %tr
+        %td
+          %img{src: "/images/#{image._id}/show"}

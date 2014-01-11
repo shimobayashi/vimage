@@ -1,0 +1,11 @@
+development:
+  sessions:
+    default:
+      hosts:
+        - localhost
+      database: vimage_development
+
+production:
+  sessions:
+    default:
+      uri: <%= ENV['MONGOLAB_URI'] %>
