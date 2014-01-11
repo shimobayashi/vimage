@@ -3,6 +3,7 @@ require 'mongoid'
 require 'haml'
 require 'mime/types'
 require 'base64'
+require 'rmagick'
 
 require_relative 'models/image'
 
@@ -19,16 +20,23 @@ get '/' do
 end
 
 # 画像投稿エンドポイント
-#TODO Compress
 post '/images/new' do
+  # Decode
   mime, base64 = params[:data_uri].scan(/^data:(.+);base64,(.+)$/).first
-
   mime_type = MIME::Types[mime].first
   halt 400, 'invalid mime' unless mime_type.media_type == 'image' && mime_type.registered?
   body = Base64.decode64(base64)
 
+  # Compress
+  mimg = Magick::Image.from_blob(body).first
+  mimg.resize_to_fit!(500, 500) if [mimg.columns, mimg.rows].any? {|n| n > 500}
+  mimg.format = 'jpeg'
+  mime = mimg.mime_type
+  body = mimg.to_blob {|i| i.quality = 60}
+
+  # Save
   image = Image.new({
-    mime: mime_type.to_s,
+    mime: mime,
     body: Moped::BSON::Binary.new(:generic, body),
   })
   halt 503, 'failed to save image' unless image.save
