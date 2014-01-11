@@ -12,5 +12,5 @@
     - @images.each do |image|
       %tr
         %td
-          %img{src: "/images/#{image._id}"}
+          %img{src: image.url}
   != will_paginate @images

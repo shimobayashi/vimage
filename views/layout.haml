@@ -3,8 +3,9 @@
 %html
   %head
     %title vimage
-    %script{:type => 'text/javascript', :src => '/js/zepto.js'}
-    %script{:type => 'text/javascript', :src => '/js/vimage.js'}
+    %script{type: 'text/javascript', src: '/js/zepto.js'}
+    %script{type: 'text/javascript', src: '/js/vimage.js'}
+    %link{href: '/images.rss', rel: 'alternative', title: 'RSS', type: 'application/xml'}
 %body
   %h1 vimage
   != yield
