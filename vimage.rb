@@ -23,6 +23,8 @@ get '/' do
 end
 
 # 画像投稿エンドポイント
+#TODO tagging
+#TODO title
 post '/images/new' do
   # Decode
   mime, base64 = params[:data_uri].scan(/^data:(.+);base64,(.+)$/).first
