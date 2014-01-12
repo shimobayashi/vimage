@@ -42,7 +42,7 @@ get '/images.rss' do
     @images.each do |image|
       item = rss.items.new_item
       item.title = image.title
-      item.link = "#{base_url}#{image.image_url}"
+      item.link = image.url
       item.guid.content = image._id
       item.guid.isPermaLink = false
       item.description = %Q(<p>tags: #{image.tags}</p><img src="#{base_url}#{image.image_url}">)

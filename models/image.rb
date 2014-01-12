@@ -11,13 +11,14 @@ class Image
   field :mime, type: String
   field :body, type: Moped::BSON::Binary
   field :title, type: String, default: 'no title'
-  field :url, type: String
+  field :url, type: String, default: ''
 
   scope :recent, desc(:created_at)
 
   validate :validate_mime
   validates :title, length: { maximum: 256 }
   validate :validate_url
+  validates :url, length: { maximum: 2056 }
 
   def validate_mime
     mime_type = MIME::Types[mime].first
