@@ -5,7 +5,7 @@
     %title= "#{@tags.title_prefix}vimage"
     %script{type: 'text/javascript', src: '/js/zepto.js'}
     %script{type: 'text/javascript', src: '/js/vimage.js'}
-    %link{href: '/images.rss' + (@tags ? "?tags=#{@tags.join(Image.tags_separator)}" : ''), rel: 'alternative', title: 'RSS', type: 'application/xml'}
+    %link{href: "/images.rss#{@tags.query_params}" , rel: 'alternate', title: 'RSS', type: 'application/xml'}
 %body
   %a{href: '/'}
     %h1 vimage
