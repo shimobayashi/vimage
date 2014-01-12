@@ -55,11 +55,9 @@ get '/images.rss' do
 end
 
 # 画像投稿エンドポイント
-#TODO data-uri やめて base64
 post '/images/new' do
   # Decode
-  mime, base64 = params[:data_uri].scan(/^data:(.+);base64,(.+)$/).first
-  body = Base64.decode64(base64)
+  body = Base64.decode64(params[:base64])
 
   # Compress
   mimg = Magick::Image.from_blob(body).first

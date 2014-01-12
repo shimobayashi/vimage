@@ -5,9 +5,9 @@ $(function() {
         $('#title').val(file.name)
         var reader = new FileReader();
         reader.onload = function(event) {
-            $('#hidden').val(event.target.result);
+            $('#hidden').val(window.btoa(event.target.result));
             $('#submit').removeAttr('disabled' );
         };
-        reader.readAsDataURL(file);
+        reader.readAsBinaryString(file);
     });
 });

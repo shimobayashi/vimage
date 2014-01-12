@@ -3,7 +3,7 @@
   %input#title{type: :text, name: :tags, placeholder: 'tags'}
   %input#title{type: :text, name: :url, placeholder: 'url'}
   %input#file{type: :file}
-  %input#hidden{type: :hidden, name: :data_uri}
+  %input#hidden{type: :hidden, name: :base64}
   %input#submit{type: :submit, value: 'アップロード'}
   %p 画像のアップロードはFile APIに対応しているブラウザーからご利用ください。
 != will_paginate @images

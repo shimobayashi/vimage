@@ -25,6 +25,7 @@ class Image
   end
 
   def validate_url
+    return if !url || url == ''
     uri = URI.parse(url)
     p uri
     %w(http https).include?(uri.scheme) or raise 'has invalid scheme'
