@@ -18,6 +18,7 @@ GEM
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
       rb-kqueue (>= 0.2)
+    mime-types (2.0)
     mongoid (3.1.6)
       activemodel (~> 3.2)
       moped (~> 1.4)
@@ -61,6 +62,7 @@ PLATFORMS
 
 DEPENDENCIES
   haml
+  mime-types
   mongoid
   mongoid_taggable
   rerun
