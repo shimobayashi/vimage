@@ -1,4 +1,5 @@
 require 'mime/types'
+require 'uri'
 
 class Image
   include Mongoid::Document
@@ -10,18 +11,28 @@ class Image
   field :mime, type: String
   field :body, type: Moped::BSON::Binary
   field :title, type: String, default: 'no title'
+  field :url, type: String
 
   scope :recent, desc(:created_at)
 
   validate :validate_mime
   validates :title, length: { maximum: 256 }
+  validate :validate_url
 
   def validate_mime
     mime_type = MIME::Types[mime].first
-    errors.add(:mime, 'invalid mime') unless mime_type.media_type == 'image' && mime_type.registered?
+    errors.add(:mime, 'is invalid') unless mime_type.media_type == 'image' && mime_type.registered?
   end
 
-  def url
+  def validate_url
+    uri = URI.parse(url)
+    p uri
+    %w(http https).include?(uri.scheme) or raise 'has invalid scheme'
+  rescue
+    errors.add(:url, $!.message)
+  end
+
+  def image_url
     "/images/#{_id}"
   end
 end

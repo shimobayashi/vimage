@@ -42,10 +42,10 @@ get '/images.rss' do
     @images.each do |image|
       item = rss.items.new_item
       item.title = image.title
-      item.link = "#{base_url}#{image.url}"
+      item.link = "#{base_url}#{image.image_url}"
       item.guid.content = image._id
       item.guid.isPermaLink = false
-      item.description = %Q(<p>tags: #{image.tags}</p><img src="#{base_url}#{image.url}">)
+      item.description = %Q(<p>tags: #{image.tags}</p><img src="#{base_url}#{image.image_url}">)
       item.date = image.updated_at
     end
   end
@@ -55,7 +55,6 @@ get '/images.rss' do
 end
 
 # 画像投稿エンドポイント
-#TODO url
 post '/images/new' do
   # Decode
   mime, base64 = params[:data_uri].scan(/^data:(.+);base64,(.+)$/).first
@@ -74,8 +73,9 @@ post '/images/new' do
     body: Moped::BSON::Binary.new(:generic, body),
     title: params[:title],
     tags: params[:tags],
+    url: params[:url],
   })
-  halt 503, "failed to save image: #{image.erros.join(', ')}" unless image.save
+  halt 503, "failed to save image: #{image.errors.full_messages.join(', ')}" unless image.save
   redirect '/'
 end
 
