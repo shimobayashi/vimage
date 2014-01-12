@@ -79,10 +79,16 @@ post '/images/new' do
 end
 
 # 画像表示
-#TODO auth
 get '/images/:id' do
+  halt 403, 'invalid password' unless request.cookies['password'] == ENV['VIMAGE_PASSWORD']
   image = Image.find(params[:id])
   halt 404, 'image not found' unless image
   content_type image.mime
   image.body.to_s
+end
+
+# インチキ認証
+post '/login' do
+  response.set_cookie(:password, value: params[:password], expires: Time.new(2024))
+  redirect '/'
 end
