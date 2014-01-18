@@ -45,7 +45,7 @@ get '/images.rss' do
       item.link = image.url
       item.guid.content = image._id
       item.guid.isPermaLink = false
-      item.description = %Q(<p>tags: #{image.tags}</p><img src="#{base_url}#{image.image_url}">)
+      item.description = %Q(<div class="tags">#{image.tags}</div><img src="#{base_url}#{image.image_url}">)
       item.date = image.updated_at
     end
   end
