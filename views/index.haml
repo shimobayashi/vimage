@@ -9,10 +9,10 @@
   %input#hidden{type: :hidden, name: :base64}
   %input#submit{type: :submit, value: 'アップロード'}
   %p 画像のアップロードはFile APIに対応しているブラウザーからご利用ください。
-!= will_paginate @images
 %form
   %input{type: :text, name: :tags, placeholder: 'tag1 tag2', value: (@tags || []).join(Image.tags_separator)}
   %input#submit{type: :submit, value: '検索'}
+!= will_paginate @images
 %table
   %thead
     %tr
