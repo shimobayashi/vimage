@@ -1,3 +1,5 @@
+require 'mongoid'
+require 'mongoid_taggable'
 require 'mime/types'
 require 'uri'
 
@@ -19,6 +21,8 @@ class Image
   validates :title, length: { maximum: 256 }
   validate :validate_url
   validates :url, length: { maximum: 2056 }
+
+  index({ created_at: 1 }, {})
 
   def validate_mime
     mime_type = MIME::Types[mime].first

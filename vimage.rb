@@ -5,7 +5,6 @@ require 'base64'
 require 'RMagick'
 require 'will_paginate_mongoid'
 require 'rss/maker'
-require 'mongoid_taggable'
 
 require_relative 'models/image'
 require_relative 'models/tags'

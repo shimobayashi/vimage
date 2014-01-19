@@ -1,3 +1,5 @@
+require_relative 'image'
+
 class Tags < Array
   def initialize(tags)
     super((tags || '').split(Image.tags_separator))
