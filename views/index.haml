@@ -12,6 +12,9 @@
 %form
   %input{type: :text, name: :tags, placeholder: 'tag1 tag2', value: (@tags || []).join(Image.tags_separator)}
   %input#submit{type: :submit, value: '検索'}
+%p
+  %span= Image.count
+  %span images
 != will_paginate @images
 %table
   %thead
