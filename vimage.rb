@@ -74,12 +74,12 @@ post '/images/new' do
     url: params[:url],
   })
   halt 503, "failed to save image: #{image.errors.full_messages.join(', ')}" unless image.save
-  redirect '/'
+  redirect image.image_url
 
   # Destroy overflowed image
-  EM::defer do
+  #EM::defer do
     Image.asc(:created_at).first.destroy while Image.count > 4000
-  end
+  #end
 end
 
 # 画像表示
