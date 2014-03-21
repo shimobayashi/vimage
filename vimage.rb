@@ -78,7 +78,7 @@ post '/images/new' do
 
   # Destroy overflowed image
   #EM::defer do
-    Image.asc(:created_at).first.destroy while Image.count > 4000
+    #Image.asc(:created_at).first.destroy while Image.count > 4000
   #end
 end
 
