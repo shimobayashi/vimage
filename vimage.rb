@@ -59,7 +59,7 @@ post '/images/new' do
   body = Base64.decode64(params[:base64])
 
   # Compress
-  mimg = Magick::Image.from_blob(body)
+  mimg = Magick::ImageList.from_blob(body)
   if (mimg.size > 1) # animated
     body = mimg.to_blob
   else
