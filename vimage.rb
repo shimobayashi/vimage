@@ -59,15 +59,19 @@ post '/images/new' do
   body = Base64.decode64(params[:base64])
 
   # Compress
-  mimg = Magick::Image.from_blob(body).first
-  mimg.resize_to_fit!(600, 600) if [mimg.columns, mimg.rows].any? {|n| n > 600}
-  mimg.format = 'jpeg'
-  mime = mimg.mime_type
-  body = mimg.to_blob {|i| i.quality = 60}
+  mimg = Magick::Image.from_blob(body)
+  if (mimg.size > 1) # animated
+    body = mimg.to_blob
+  else
+    mimg = mimg.first
+    mimg.resize_to_fit!(600, 600) if [mimg.columns, mimg.rows].any? {|n| n > 600}
+    mimg.format = 'jpeg'
+    body = mimg.to_blob {|i| i.quality = 60}
+  end
 
   # Save
   image = Image.new({
-    mime: mime,
+    mime: mimg.mime_type,
     body: Moped::BSON::Binary.new(:generic, body),
     title: params[:title],
     tags: params[:tags],
