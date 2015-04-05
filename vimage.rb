@@ -77,6 +77,7 @@ post '/images/new' do
     tags: params[:tags],
     url: params[:url],
   })
+  # MongoLabは容量制限を超えると保存に成功させたあと無言で勝手に削除するので注意！ストレージ全体の容量制限とは別に、ドキュメントあたり50kBの容量制限もある様子
   halt 503, "failed to save image: #{image.errors.full_messages.join(', ')}" unless image.save
 
   # Destroy overflowed image
@@ -92,8 +93,19 @@ get '/images/:id' do
   halt 403, 'invalid password' unless request.cookies['password'] == ENV['VIMAGE_PASSWORD']
   image = Image.find(params[:id])
   halt 404, 'image not found' unless image
+
   content_type image.mime
-  image.body.to_s
+  if image.mime == 'image/gif'
+    scale = 2
+    ilist = Magick::ImageList.new.from_blob(image.body.to_s)
+    #ilist = ilist.coalesce
+    ilist.each{|frame| frame.resize!(scale)}
+    #ilist = ilist.optimize_layers(Magick::OptimizeTransLayer)
+    #ilist = ilist.deconstruct
+    ilist.to_blob
+  else
+    image.body.to_s
+  end
 end
 
 # インチキ認証
