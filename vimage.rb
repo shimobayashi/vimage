@@ -44,7 +44,7 @@ get '/images.rss' do
       item.link = image.url || "#{base_url}#{image.image_url}"
       item.guid.content = image._id
       item.guid.isPermaLink = false
-      item.description = %Q(<div class="tags">#{image.tags}</div><img src="#{base_url}#{image.image_url}">)
+      item.description = image.to_html(base_url)
       item.date = image.updated_at
     end
   end
@@ -95,17 +95,7 @@ get '/images/:id' do
   halt 404, 'image not found' unless image
 
   content_type image.mime
-  if image.mime == 'image/gif'
-    scale = 2
-    ilist = Magick::ImageList.new.from_blob(image.body.to_s)
-    #ilist = ilist.coalesce
-    ilist.each{|frame| frame.resize!(scale)}
-    #ilist = ilist.optimize_layers(Magick::OptimizeTransLayer)
-    #ilist = ilist.deconstruct
-    ilist.to_blob
-  else
-    image.body.to_s
-  end
+  image.body.to_s
 end
 
 # インチキ認証

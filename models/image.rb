@@ -41,4 +41,12 @@ class Image
   def image_url
     "/images/#{_id}"
   end
+
+  def to_html(base_url)
+    if self.mime == 'image/gif' 
+      %Q(<div class="tags">#{self.tags}</div><img width="400%" src="#{base_url}#{self.image_url}">)
+    else
+      %Q(<div class="tags">#{self.tags}</div><img src="#{base_url}#{self.image_url}">)
+    end
+  end
 end
