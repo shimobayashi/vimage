@@ -77,11 +77,15 @@ post '/images/new' do
     tags: params[:tags],
     url: params[:url],
   })
-  # MongoLabは容量制限を超えると保存に成功させたあと無言で勝手に削除するので注意！ストレージ全体の容量制限とは別に、ドキュメントあたり50kBの容量制限もある様子
+  # MongoLabは容量制限を超えると保存に成功させたあと無言で勝手に削除するので注意！ストレージ全体の容量制限とは別に、ドキュメントあたり40kBの容量制限もある様子
   halt 503, "failed to save image: #{image.errors.full_messages.join(', ')}" unless image.save
 
   # Destroy overflowed image
   EM::defer do
+    # MongoLabのSandboxプランで最大400MB
+    # さらに裏では1ドキュメントあたり最大40kBの制限がある
+    # 従って、 500000 / 40 = 12500ドキュメントあたりが限界値となる
+    # 実際にはもろもろのデータが突っ込まれるので、要件を満たす範囲内で小さい値にしておく
     Image.asc(:created_at).first.destroy while Image.count > 4000
   end
 
