@@ -36,7 +36,7 @@ get '/images.rss' do
   rss = RSS::Maker.make('2.0') do |rss|
     rss.channel.title = "#{@tags.title_prefix}vimage"
     rss.channel.description = 'images from vimage'
-    rss.channel.link = "#{base_url}/#{@tags.query_params}"
+    rss.channel.link = "#{base_url}#{@tags.query_params}"
 
     @images.each do |image|
       item = rss.items.new_item
