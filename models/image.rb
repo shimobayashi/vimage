@@ -39,7 +39,7 @@ class Image
   end
 
   def image_url
-    "/images/#{_id}"
+    "./images/#{_id}"
   end
 
   def to_html(base_url)
