@@ -11,7 +11,9 @@ development:
 production:
   sessions:
     default:
-      uri: <%= ENV['MONGOLAB_URI'] %>
+      hosts:
+        - localhost
+      database: vimage_production
       options:
         timeout: 3
         max_retries: 5
