@@ -79,6 +79,7 @@ post '/images/new' do
   })
   # MongoLabは容量制限を超えると保存に成功させたあと無言で勝手に削除するので注意！ストレージ全体の容量制限とは別に、ドキュメントあたり40kBの容量制限もある様子
   halt 503, "failed to save image: #{image.errors.full_messages.join(', ')}" unless image.save
+  halt 503, "failed to save image truly: #{image.errors.full_messages.join(', ')}" unless Image.find(image.id)
 
   # Destroy overflowed image
   EM::defer do
