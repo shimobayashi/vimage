@@ -88,7 +88,7 @@ post '/images/new' do
     # さらに裏では1ドキュメントあたり最大40kBの制限がある
     # 従って、 500000 / 40 = 12500ドキュメントあたりが限界値となる
     # 実際にはもろもろのデータが突っ込まれるので、要件を満たす範囲内で小さい値にしておく
-    Image.asc(:created_at).first.destroy while Image.count > 50000
+    Image.asc(:created_at).first.destroy while Image.count > 4000
   #end
 
   redirect base_url + image.image_url
