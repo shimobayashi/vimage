@@ -56,23 +56,23 @@ end
 # 画像投稿エンドポイント
 post '/images/new' do
   # Decode
-  body = Base64.decode64(params[:base64])
+  content = Base64.decode64(params[:base64])
 
   # Compress
-  mimg = Magick::ImageList.new.from_blob(body)
+  mimg = Magick::ImageList.new.from_blob(content)
   if (mimg.size > 1) # animated
-    body = mimg.to_blob
+    content = mimg.to_blob
   else
     mimg = mimg.first
     mimg.resize_to_fit!(600, 600) if [mimg.columns, mimg.rows].any? {|n| n > 600}
     mimg.format = 'jpeg'
-    body = mimg.to_blob {|i| i.quality = 60}
+    content = mimg.to_blob {|i| i.quality = 60}
   end
 
   # Save
   image = Image.new({
     mime: mimg.mime_type,
-    body: Moped::BSON::Binary.new(:generic, body),
+    content: Moped::BSON::Binary.new(:generic, content),
     title: params[:title],
     tags: params[:tags],
     url: params[:url],
@@ -101,7 +101,7 @@ get '/images/:id' do
   halt 404, 'image not found' unless image
 
   content_type image.mime
-  image.body.to_s
+  image.content.to_s
 end
 
 # インチキ認証

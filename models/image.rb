@@ -11,7 +11,7 @@ class Image
   tags_separator ' '
 
   field :mime, type: String
-  field :body, type: Moped::BSON::Binary
+  field :body, type: Moped::BSON::Binary #XXX body is obsolete, use content. I will delete this
   field :title, type: String, default: 'no title'
   field :url, type: String, default: ''
 
@@ -48,5 +48,29 @@ class Image
     else
       %Q(<a href="#{self.url}"><div class="tags">#{self.tags}</div><img src="#{base_url}#{self.image_url}"></a>)
     end
+  end
+
+  def content=(blob)
+    @content = blob
+  end
+  def content
+    if !@content && File.exist?(content_filepath)
+      @content = open(content_filepath).read
+    end
+    return @content
+  end
+  def content_filepath
+    "/var/tmp/vimage/#{self.id}"
+  end
+
+  def save
+    res = super
+    open(content_filepath, 'w').write(content) if content
+    return res
+  end
+
+  def destroy
+    File.delete(content_filepath) if File.exist?(content_filepath)
+    return super
   end
 end
