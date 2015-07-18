@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'sinatra'
-gem 'mongoid'
+gem 'mongoid', '~> 3.0'
 gem 'haml'
 gem 'rmagick'
 gem 'will_paginate_mongoid'

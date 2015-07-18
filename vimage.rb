@@ -109,3 +109,12 @@ post '/login' do
   response.set_cookie(:password, value: params[:password], expires: Time.new(2024))
   redirect base_url
 end
+
+get '/idf' do
+  hash = {}
+  image_count = Image.count
+  for (tag, weight) in Image.tags_with_weight
+    hash[tag] = {idf: Math.log(image_count / weight)}
+  end
+  hash.to_json
+end

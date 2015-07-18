@@ -3,7 +3,7 @@ development:
     default:
       hosts:
         - localhost
-      database: vimage_development
+      database: vimage_production
       options:
         timeout: 3
         max_retries: 5
