@@ -14,6 +14,8 @@ set :public_folder, proc{ File.join(root, 'static') }
 Mongoid.load!('config/mongoid.yml')
 WillPaginate.per_page = 20
 
+allowed_user_agent = Regexp.new(ENV['VIMAGE_ALLOWED_USER_AGENT'])
+
 helpers do
   def base_url
     "#{request.scheme}://#{request.host_with_port}#{request.script_name}/"
@@ -96,7 +98,7 @@ end
 
 # 画像表示
 get '/images/:id' do
-  halt 403, 'invalid password' unless (request.cookies['password'] == ENV['VIMAGE_PASSWORD'] || request.user_agent.index(ENV['VIMAGE_ALLOWED_USER_AGENT']))
+  halt 403, 'invalid password' unless (request.cookies['password'] == ENV['VIMAGE_PASSWORD'] || request.user_agent =~ allowed_user_agent)
   image = Image.find(params[:id])
   halt 404, 'image not found' unless image
 
