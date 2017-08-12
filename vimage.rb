@@ -96,7 +96,10 @@ end
 
 # 画像表示
 get '/images/:id' do
-  halt 403, 'invalid password' unless request.cookies['password'] == ENV['VIMAGE_PASSWORD']
+  halt 403, 'invalid password' unless (
+    request.cookies['password'] == ENV['VIMAGE_PASSWORD']
+    || request.user_agent.index(ENV['VIMAGE_ALLOWED_USER_AGENT'])
+  )
   image = Image.find(params[:id])
   halt 404, 'image not found' unless image
 
