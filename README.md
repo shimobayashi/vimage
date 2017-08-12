@@ -1,5 +1,6 @@
-#vimage
-viking images!
+# vimage
 
-- speedy
-- crawler friendly
+Viking images!
+
+- Speedy
+- Crawler friendly
